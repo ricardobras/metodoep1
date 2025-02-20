@@ -14,8 +14,9 @@ services:
       - --providers.docker.network=traefik_public
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       # Config para SSL Lets Encrypt
-      # altere para seu e-mail
+     
       - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      # altere para seu e-mail
       - --certificatesresolvers.le.acme.email=ricardobrasn@gmail.com
       - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.le.acme.tlschallenge=true
