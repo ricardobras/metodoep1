@@ -23,9 +23,9 @@ echo "Instalando Docker..."
 apt install -y docker-ce
 
 # Alternando para o backend legado do iptables
-echo "Configurando iptables para usar o backend legado..."
-update-alternatives --set iptables /usr/sbin/iptables-legacy
-update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+#echo "Configurando iptables para usar o backend legado..."
+#update-alternatives --set iptables /usr/sbin/iptables-legacy
+#update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 
 # Habilitando e iniciando o Docker
 echo "Habilitando e iniciando o Docker..."
