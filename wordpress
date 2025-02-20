@@ -1,0 +1,76 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: metodoep1!#
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: metodoep1!#
+
+    volumes:
+      - db_data:/var/lib/mysql
+      
+    networks:
+      - app_network
+
+  wordpress:
+    image: ricardobrasn2024/wp-gringa:latest
+
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: metodoep1!#
+      WORDPRESS_DB_NAME: wordpress
+      PHP_UPLOAD_MAX_FILESIZE: 264M
+      PHP_POST_MAX_SIZE: 264M
+      WP_MEMORY_LIMIT: 200M
+    volumes:
+      - wp_data:/var/www/html
+
+    networks:
+      - app_network
+      - traefik_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+      labels:
+        #SSL
+        - traefik.enable=true
+        - traefik.http.routers.wordpress_app.rule=Host(`cloudmanager.com.br`)
+        - traefik.http.routers.wordpress_app.entrypoints=websecure
+        - traefik.http.routers.wordpress_app.tls.certresolver=le
+        - traefik.http.routers.wordpress_app.service=wordpress_app
+        - traefik.http.services.wordpress_app.loadbalancer.server.port=80
+        - traefik.http.middlewares.wordpress_sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+        - traefik.http.routers.wordpress_app.middlewares=wordpress_sslheader
+
+  #SSL
+       
+  #      - traefik.http.routers.wordpress_app1.rule=Host(`dominio2.com.br`)
+  #      - traefik.http.routers.wordpress_app1.entrypoints=websecure
+  #      - traefik.http.routers.wordpress_app1.tls.certresolver=le
+  #      - traefik.http.routers.wordpress_app1.service=wordpress_app1
+  #      - traefik.http.services.wordpress_app1.loadbalancer.server.port=80
+  #      - traefik.http.middlewares.wordpress_sslheader1.headers.customrequestheaders.X-Forwarded-Proto=https
+  #      - traefik.http.routers.wordpress_app1.middlewares=wordpress_sslheader1
+
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  traefik_public:
+    external: true
+  app_network:
+    external: false
+
