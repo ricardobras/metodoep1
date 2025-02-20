@@ -45,8 +45,12 @@ git clone https://github.com/ricardobras/metodoep1.git /portainer
 chmod 777 -R /portainer/
 cd /portainer
 
-# Passo 1: Solicitar o novo domínio
-echo "Digite o novo domínio:"
+# Passo 1: Destacar o prompt e solicitar o novo domínio
+echo -e "\n\e[1;32m*************************************************************\e[0m"
+echo -e "\e[1;32m*      Digite o novo domínio para substituir no arquivo      *\e[0m"
+echo -e "\e[1;32m*             (exemplo: meudominio.com)                     *\e[0m"
+echo -e "\e[1;32m*************************************************************\e[0m"
+echo -n "Digite o novo domínio: "
 read novo_dominio
 
 # Passo 2: Verificar se o arquivo portainer.yaml existe
@@ -54,13 +58,13 @@ arquivo="/portainer/portainer.yaml"
 if [ -f "$arquivo" ]; then
     # Passo 3: Substituir o domínio no arquivo
     sed -i "s/meudominio.com/$novo_dominio/g" "$arquivo"
-    echo "Domínio substituído com sucesso!"
+    echo -e "\e[1;34mDomínio substituído com sucesso!\e[0m"
 else
-    echo "Arquivo portainer.yml não encontrado!"
+    echo -e "\e[1;31mArquivo portainer.yaml não encontrado!\e[0m"
 fi
 
 # Iniciando Portainer
-docker stack deploy -c /portainer/portainer.yml portainer
+docker stack deploy -c /portainer/portainer.yaml portainer
 
 # Criando redes Docker para Traefik e aplicações
 echo "Criando redes Docker (traefik_public e app_network)..."
