@@ -45,7 +45,7 @@ git clone https://github.com/ricardobras/metodoep1.git /portainer
 chmod 777 -R /portainer/
 cd /portainer
 
-# Passo 1: Solicitar o novo domínio
+# Passo 1: Destacar o prompt e solicitar o novo domínio
 echo -e "\n\e[1;32m*************************************************************\e[0m"
 echo -e "\e[1;32m*      Digite o novo domínio para substituir no arquivo      *\e[0m"
 echo -e "\e[1;32m*             (exemplo: meudominio.com)                     *\e[0m"
@@ -53,12 +53,15 @@ echo -e "\e[1;32m*************************************************************\e
 echo -n "Digite o novo domínio: "
 read novo_dominio
 
-# Passo 2: Verificar se o arquivo portainer.yaml existe
+# Passo 2: Concatenar 'portainer.' ao domínio
+subdominio="portainer.$novo_dominio"
+
+# Passo 3: Verificar se o arquivo portainer.yaml existe
 arquivo="/portainer/portainer.yaml"
 if [ -f "$arquivo" ]; then
-    # Passo 3: Substituir o domínio no arquivo
-    sed -i "s/meudominio.com/$novo_dominio/g" "$arquivo"
-    echo -e "\e[1;34mDomínio substituído com sucesso!\e[0m"
+    # Passo 4: Substituir o domínio no arquivo
+    sed -i "s/meudominio.com/$subdominio/g" "$arquivo"
+    echo -e "\e[1;34mSubdomínio substituído com sucesso! Novo subdomínio: $subdominio\e[0m"
 else
     echo -e "\e[1;31mArquivo portainer.yaml não encontrado!\e[0m"
 fi
@@ -74,6 +77,10 @@ docker network create --driver=overlay app_network
 # Implantando o Portainer usando um arquivo YAML
 echo "Implantando o Portainer com docker stack deploy..."
 
-echo "Instalação concluída!"
-echo "Acesse o Portainer em http://seu_ip:9000"
-
+# Mensagem de sucesso com o endereço de acesso
+ip_servidor=$(hostname -I | awk '{print $1}')
+echo -e "\n\e[1;32mInstalação concluída!\e[0m"
+echo -e "\e[1;32mAcesse o Portainer em: http://$ip_servidor:9000\e[0m"
+echo -e "\n\e[1;33m** Observação: Para que o acesso ao Portainer funcione corretamente, você precisará adicionar o seguinte registro CNAME no seu DNS: \e[0m"
+echo -e "\e[1;33m** portainer.$novo_dominio -> $ip_servidor\e[0m"
+echo -e "\e[1;33m** Após configurar o DNS, você poderá acessar o Portainer usando o endereço: portainer.$novo_dominio\e[0m"
