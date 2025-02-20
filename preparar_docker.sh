@@ -24,8 +24,15 @@ apt install -y docker-ce
 
 # Alternando para o backend legado do iptables
 #echo "Configurando iptables para usar o backend legado..."
-#update-alternatives --set iptables /usr/sbin/iptables-legacy
-#update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+update-alternatives --set iptables /usr/sbin/iptables-legacy
+update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+iptables -A FORWARD -i docker0 -o docker0 -j ACCEPT
+iptables -A FORWARD -i docker_gwbridge -o docker_gwbridge -j ACCEPT
+iptables -A INPUT -p tcp --dport 1:65535 -j ACCEPT
+iptables -A INPUT -p udp --dport 1:65535 -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
 
 # Habilitando e iniciando o Docker
 echo "Habilitando e iniciando o Docker..."
