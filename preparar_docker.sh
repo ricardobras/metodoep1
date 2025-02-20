@@ -9,10 +9,10 @@ apt upgrade -y
 echo "Instalando dependências..."
 apt-get install -y curl apt-transport-https ca-certificates software-properties-common
 
-# Adicionando repositório do Docker
+# Adicionando repositório do Docker sem pedir confirmação
 echo "Adicionando repositório do Docker..."
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
 # Atualizando novamente após adicionar o repositório
 echo "Atualizando lista de pacotes..."
@@ -45,7 +45,7 @@ git clone https://github.com/ricardobras/metodoep1.git /portainer
 chmod 777 -R /portainer/
 cd /portainer
 
-# Passo 1: Destacar o prompt e solicitar o novo domínio
+# Passo 1: Solicitar o novo domínio
 echo -e "\n\e[1;32m*************************************************************\e[0m"
 echo -e "\e[1;32m*      Digite o novo domínio para substituir no arquivo      *\e[0m"
 echo -e "\e[1;32m*             (exemplo: meudominio.com)                     *\e[0m"
@@ -76,3 +76,4 @@ echo "Implantando o Portainer com docker stack deploy..."
 
 echo "Instalação concluída!"
 echo "Acesse o Portainer em http://seu_ip:9000"
+
