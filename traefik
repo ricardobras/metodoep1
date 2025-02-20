@@ -1,0 +1,49 @@
+version: '3.8'
+
+# mais info: https://youtu.be/o7tBbYy-5I4
+services:
+  traefik:
+    image: traefik:v2.11
+    command:
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.swarmMode=true
+      #defina a mesma rede que você criou para o traefik
+      - --providers.docker.network=traefik_public
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      # Config para SSL Lets Encrypt
+      # altere para seu e-mail
+      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.le.acme.email=ricardobrasn@gmail.com
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+      # Global HTTP -> HTTPS
+      #- --entrypoints.web.http.redirections.entryPoint.to=websecure
+      #- --entrypoints.web.http.redirections.entryPoint.scheme=https
+      #- --api
+      #- --log.level=DEBUG
+    ports:
+      - "80:80"
+      #- "8080:8080" # porta do painel do traefik, caso queira ver todas as rotas.
+      - "443:443"
+    volumes:
+      - traefik_certificates:/letsencrypt
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - traefik_public
+
+volumes:
+  traefik_certificates:
+    external: true
+
+networks:
+  traefik_public:
+    external: true
