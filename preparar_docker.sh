@@ -49,8 +49,8 @@ cd /portainer
 echo "Digite o novo domínio:"
 read novo_dominio
 
-# Passo 2: Verificar se o arquivo portainer.yml existe
-arquivo="/portainer/portainer.yml"
+# Passo 2: Verificar se o arquivo portainer.yaml existe
+arquivo="/portainer/portainer.yaml"
 if [ -f "$arquivo" ]; then
     # Passo 3: Substituir o domínio no arquivo
     sed -i "s/meudominio.com/$novo_dominio/g" "$arquivo"
