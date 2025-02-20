@@ -31,6 +31,7 @@ update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 echo "Habilitando e iniciando o Docker..."
 systemctl enable docker
 systemctl start docker
+/etc/init.d/docker start
 
 # Inicializando o Docker Swarm
 echo "Inicializando o Docker Swarm..."
