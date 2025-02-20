@@ -28,15 +28,15 @@ services:
       replicas: 1
       placement:
         constraints: [ node.role == manager ]
-      labels:
-        - "traefik.enable=true"
-        - "traefik.docker.network=traefik_public"
-        - "traefik.http.routers.portainer.rule=Host(`meudominio.com`)"
-        - "traefik.http.routers.portainer.entrypoints=websecure"
-        - "traefik.http.routers.portainer.priority=1"
-        - "traefik.http.routers.portainer.tls.certresolver=le"
-        - "traefik.http.routers.portainer.service=portainer"
-        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      labels: []
+        #- "traefik.enable=true"
+        #- "traefik.docker.network=traefik_public"
+        #- "traefik.http.routers.portainer.rule=Host(`meudominio.com`)"
+        #- "traefik.http.routers.portainer.entrypoints=websecure"
+        #- "traefik.http.routers.portainer.priority=1"
+        #- "traefik.http.routers.portainer.tls.certresolver=le"
+        #- "traefik.http.routers.portainer.service=portainer"
+        #- "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 networks:
    agent_network:
