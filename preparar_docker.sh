@@ -69,6 +69,9 @@ fi
 # Iniciando Portainer
 docker stack deploy -c /portainer/portainer.yaml portainer
 
+# Iniciando Traefik
+docker stack deploy -c  /portainer/traefik.yml traefik
+
 # Criando redes Docker para Traefik e aplicações
 echo "Criando redes Docker (traefik_public e app_network)..."
 docker network create --driver=overlay traefik_public
